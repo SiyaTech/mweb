@@ -18,7 +18,7 @@ const MIME_TYPES = {
     '.ico': 'image/x-icon'
 };
 
-const PUBLIC_DIR = path.join(__dirname, 'app', 'website');
+const PUBLIC_DIR = __dirname;
 
 const server = http.createServer((req, res) => {
     // Parse URL and sanitize path to prevent directory traversal
