@@ -4,26 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Munshiji (मुंशीजी) — Intelligent Financial SMS Ledger & Google Sheets Sync</title>
-    <!-- Tailwind CSS via CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS (served locally for maximum offline reliability) -->
+    <script src="tailwind.min.js"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            dark: '#0B111E',
-                            card: '#151F32',
-                            accent: '#F59E0B', /* Gold */
-                            blue: '#3B82F6', /* Royal Blue */
-                            green: '#10B981', /* Credit Green */
-                            red: '#EF4444', /* Debit Red */
-                            border: '#1E293B'
+        if (typeof tailwind !== 'undefined') {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            brand: {
+                                dark: '#0B111E',
+                                card: '#151F32',
+                                accent: '#F59E0B', /* Gold */
+                                blue: '#3B82F6', /* Royal Blue */
+                                green: '#10B981', /* Credit Green */
+                                red: '#EF4444', /* Debit Red */
+                                border: '#1E293B'
+                            }
+                        },
+                        fontFamily: {
+                            sans: ['Inter', 'sans-serif'],
+                            mono: ['JetBrains Mono', 'monospace']
                         }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace']
                     }
                 }
             }
