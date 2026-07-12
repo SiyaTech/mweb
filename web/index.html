@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Munshiji (मुंशीजी) — Intelligent Financial SMS Ledger & Google Sheets Sync</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0B111E',
+                            card: '#151F32',
+                            accent: '#F59E0B', /* Gold */
+                            blue: '#3B82F6', /* Royal Blue */
+                            green: '#10B981', /* Credit Green */
+                            red: '#EF4444', /* Debit Red */
+                            border: '#1E293B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons via CDN (for fallback/icons) -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-brand-dark text-slate-100 font-sans antialiased selection:bg-brand-accent selection:text-brand-dark overflow-x-hidden">
+
+    <!-- Glowing Background blobs -->
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-blue/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-[20%] right-1/4 w-[400px] h-[400px] bg-brand-accent/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-[50%] left-10 w-96 h-96 bg-brand-green/5 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-brand-dark/80 border-b border-brand-border/60 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <!-- Brand SVG Logo -->
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-blue to-brand-accent p-[1px] flex items-center justify-center shadow-lg shadow-brand-blue/20">
+                    <div class="w-full h-full bg-brand-dark rounded-[11px] flex items-center justify-center">
+                        <svg class="w-6 h-6 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <span class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-brand-accent bg-clip-text text-transparent">Munshiji <span class="text-xs font-semibold px-1.5 py-0.5 bg-brand-accent/10 border border-brand-accent/20 rounded-md text-brand-accent uppercase tracking-wider">मुंशीजी</span></span>
+                    <p class="text-[9px] text-slate-400 tracking-wider -mt-1 font-medium uppercase font-mono">Personal SMS Ledger</p>
+                </div>
+            </div>
+
+            <!-- Main Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+                <a href="#features" class="hover:text-white hover:underline decoration-brand-accent decoration-2 underline-offset-8 transition-colors">Features</a>
+                <a href="#demo" class="hover:text-white hover:underline decoration-brand-accent decoration-2 underline-offset-8 transition-colors">Interactive Demo</a>
+                <a href="#how-it-works" class="hover:text-white hover:underline decoration-brand-accent decoration-2 underline-offset-8 transition-colors">How It Works</a>
+                <a href="#integrations" class="hover:text-white hover:underline decoration-brand-accent decoration-2 underline-offset-8 transition-colors">Integrations</a>
+                <a href="#manual" class="hover:text-white hover:underline decoration-brand-accent decoration-2 underline-offset-8 transition-colors">Setup Guide</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <a href="#download" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-brand-dark bg-brand-accent rounded-lg hover:bg-brand-accent/90 shadow-md shadow-brand-accent/10 hover:shadow-brand-accent/20 transition-all font-mono">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.53c-.26-.81-1-1.4-1.9-1.4h-1v-3c0-.55-.45-1-1-1h-6v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                    Download APK
+                </a>
+                
+                <!-- Mobile menu button -->
+                <button id="mobileMenuBtn" class="p-2 text-slate-400 hover:text-white focus:outline-none md:hidden">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path id="menuIcon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-brand-dark border-b border-brand-border py-4 px-6 space-y-3 transition-all duration-300">
+            <a href="#features" class="block text-slate-300 hover:text-white text-sm py-1 font-medium">Features</a>
+            <a href="#demo" class="block text-slate-300 hover:text-white text-sm py-1 font-medium">Interactive Demo</a>
+            <a href="#how-it-works" class="block text-slate-300 hover:text-white text-sm py-1 font-medium">How It Works</a>
+            <a href="#integrations" class="block text-slate-300 hover:text-white text-sm py-1 font-medium">Integrations</a>
+            <a href="#manual" class="block text-slate-300 hover:text-white text-sm py-1 font-medium">Setup Guide</a>
+            <a href="#download" class="inline-flex w-full items-center justify-center gap-2 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-brand-dark bg-brand-accent rounded-lg font-mono">
+                Download APK
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20 lg:pt-16 lg:pb-28">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Hero Text Left -->
+            <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand-accent/10 border border-brand-accent/20 rounded-full text-brand-accent text-xs font-semibold tracking-wide">
+                    <span class="flex h-2 w-2 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-accent"></span>
+                    </span>
+                    Now with Self-Healing Auto Sheets Sync
+                </div>
+                
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-none">
+                    Automate Your Ledger<br/>
+                    <span class="bg-gradient-to-r from-brand-blue via-slate-100 to-brand-accent bg-clip-text text-transparent">Directly From SMS</span>
+                </h1>
+                
+                <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0">
+                    Munshiji (मुंशीजी) runs silently on your Android device, securely parsing official bank SMS alerts into clean, structured transactions, and automatically syncing them to your personal <strong class="text-white hover:text-brand-accent transition-colors">Google Sheets</strong> or <strong class="text-white hover:text-brand-accent transition-colors">Webhook API</strong> in real-time.
+                </p>
+
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+                    <a href="#download" class="flex items-center gap-3 px-6 py-3 bg-brand-accent hover:bg-brand-accent/90 text-brand-dark font-semibold rounded-xl shadow-lg shadow-brand-accent/10 hover:shadow-brand-accent/20 hover:-translate-y-0.5 transition-all">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/>
+                        </svg>
+                        Download APK (v2.0)
+                    </a>
+                    <a href="#demo" class="flex items-center gap-2 px-6 py-3 bg-brand-card hover:bg-brand-card/80 border border-brand-border text-slate-100 font-semibold rounded-xl hover:-translate-y-0.5 transition-all">
+                        Try Sandbox Parser
+                        <svg class="w-4 h-4 text-brand-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Trust signals -->
+                <div class="pt-6 border-t border-brand-border/40 max-w-xl mx-auto lg:mx-0">
+                    <p class="text-xs text-slate-400 font-mono flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-2">
+                        <span class="flex items-center gap-1.5"><strong class="text-white">100% Client-Side</strong> Parsing</span>
+                        <span class="flex items-center gap-1.5"><strong class="text-white">Zero Cloud Logs</strong> Your Data stays yours</span>
+                        <span class="flex items-center gap-1.5"><strong class="text-white">Room SQL</strong> DB Encryption</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Hero Phone Mockup Right -->
+            <div class="lg:col-span-5 relative flex justify-center">
+                
+                <!-- Glowing effect -->
+                <div class="absolute inset-0 bg-brand-blue/20 rounded-full blur-3xl filter opacity-40 scale-75"></div>
+
+                <!-- Android Phone Mockup Wrapper -->
+                <div class="relative w-72 sm:w-80 h-[580px] bg-[#05070c] border-[8px] border-[#1e2330] rounded-[42px] shadow-2xl overflow-hidden flex flex-col ring-4 ring-brand-blue/10">
+                    <!-- Speaker / Camera Notch -->
+                    <div class="absolute top-2 left-1/2 -translate-x-1/2 w-32 h-6 bg-brand-dark rounded-full z-20 flex items-center justify-center gap-1">
+                        <div class="w-2 h-2 rounded-full bg-slate-800"></div>
+                        <div class="w-12 h-1 bg-slate-800 rounded-full"></div>
+                    </div>
+
+                    <!-- Inner App View -->
+                    <div class="flex-1 flex flex-col pt-8 bg-brand-dark font-sans relative">
+                        
+                        <!-- Mini status bar -->
+                        <div class="px-6 py-1 flex justify-between text-[10px] text-slate-500 font-mono">
+                            <span>12:45 PM</span>
+                            <div class="flex items-center gap-1">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c3.92 3.92 10.24 3.92 14.15 0l1.97-1.97C21.26 16.07 22 14.12 22 12c0-4.97-4.03-9-9-9zm-1 15v-6h2v6h-2zm0-8V8h2v2h-2z"/></svg>
+                                <span>4G LTE</span>
+                            </div>
+                        </div>
+
+                        <!-- Mini Navbar -->
+                        <div class="px-5 py-2 flex items-center justify-between border-b border-brand-border/40">
+                            <div class="flex items-center gap-2">
+                                <div class="w-6 h-6 rounded bg-brand-accent/20 flex items-center justify-center">
+                                    <span class="text-[10px] font-bold text-brand-accent font-mono">M</span>
+                                </div>
+                                <span class="text-xs font-bold text-white tracking-tight">Munshiji</span>
+                            </div>
+                            <span class="px-2 py-0.5 rounded text-[8px] font-bold bg-brand-green/10 text-brand-green border border-brand-green/20">CONNECTED</span>
+                        </div>
+
+                        <!-- Scrollable Mini Screen Area -->
+                        <div class="flex-1 overflow-y-auto px-4 py-3 space-y-3.5 select-none no-scrollbar">
+                            
+                            <!-- Balance Indicator -->
+                            <div class="bg-gradient-to-br from-brand-card to-brand-dark border border-brand-border rounded-xl p-3 space-y-1.5">
+                                <p class="text-[9px] text-slate-400 font-mono uppercase tracking-wider">Sync Status Overview</p>
+                                <div class="flex justify-between items-end">
+                                    <div>
+                                        <span class="text-lg font-bold text-white">1,412 <span class="text-xs text-slate-400 font-normal">logs</span></span>
+                                        <p class="text-[8px] text-brand-green font-mono flex items-center gap-1">
+                                            <span class="h-1 w-1 bg-brand-green rounded-full inline-block animate-pulse"></span>
+                                            Synced: 100% (No Pending)
+                                        </p>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-[10px] font-mono text-slate-400">Sheet ID: xxG8h9</p>
+                                        <p class="text-[8px] text-slate-500">Auto-Healing: On</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Chart Mockup -->
+                            <div class="bg-brand-card border border-brand-border rounded-xl p-3">
+                                <p class="text-[9px] text-slate-400 font-mono uppercase tracking-wider mb-2">Net Cash Flow Dynamics</p>
+                                <div class="h-16 flex items-end justify-between gap-1 pt-1">
+                                    <div class="w-full bg-brand-red/30 rounded-t h-1/3 relative group"><div class="absolute -top-4 left-1/2 -translate-x-1/2 text-[8px] text-slate-400 hidden group-hover:block font-mono">₹150</div></div>
+                                    <div class="w-full bg-brand-green/40 rounded-t h-[80%]"></div>
+                                    <div class="w-full bg-brand-red/20 rounded-t h-[40%]"></div>
+                                    <div class="w-full bg-brand-green/60 rounded-t h-[95%]"></div>
+                                    <div class="w-full bg-brand-red/50 rounded-t h-[50%]"></div>
+                                    <div class="w-full bg-brand-green/30 rounded-t h-[70%]"></div>
+                                </div>
+                                <div class="flex justify-between text-[7px] text-slate-500 font-mono mt-1 pt-1 border-t border-brand-border/40">
+                                    <span>Mon</span>
+                                    <span>Wed</span>
+                                    <span>Fri</span>
+                                    <span>Sun</span>
+                                </div>
+                            </div>
+
+                            <!-- Real-time logs list -->
+                            <div class="space-y-2">
+                                <p class="text-[9px] text-slate-400 font-mono uppercase tracking-wider">Live Transaction Ledger</p>
+                                
+                                <!-- Log 1 -->
+                                <div class="bg-brand-card/60 border border-brand-border rounded-lg p-2 flex justify-between items-start">
+                                    <div class="space-y-0.5">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="text-[9px] font-bold text-white">HDFC Bank</span>
+                                            <span class="px-1 py-0.2 bg-brand-green/10 text-brand-green text-[7px] rounded uppercase font-mono font-bold">Credit</span>
+                                        </div>
+                                        <p class="text-[8px] text-slate-400 font-mono">Ref: 901235 • A/c xx3421</p>
+                                    </div>
+                                    <div class="text-right space-y-0.5">
+                                        <span class="text-[10px] font-bold text-brand-green">+ ₹45,000.00</span>
+                                        <p class="text-[7px] text-slate-500 font-mono">Salary</p>
+                                    </div>
+                                </div>
+
+                                <!-- Log 2 -->
+                                <div class="bg-brand-card/60 border border-brand-border rounded-lg p-2 flex justify-between items-start">
+                                    <div class="space-y-0.5">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="text-[9px] font-bold text-white">SBI Bank</span>
+                                            <span class="px-1 py-0.2 bg-brand-red/10 text-brand-red text-[7px] rounded uppercase font-mono font-bold">Debit</span>
+                                        </div>
+                                        <p class="text-[8px] text-slate-400 font-mono">Ref: 219803 • UPI xx8231</p>
+                                    </div>
+                                    <div class="text-right space-y-0.5">
+                                        <span class="text-[10px] font-bold text-brand-red">- ₹150.00</span>
+                                        <p class="text-[7px] text-slate-500 font-mono">Dining</p>
+                                    </div>
+                                </div>
+
+                                <!-- Log 3 -->
+                                <div class="bg-brand-card/60 border border-brand-border rounded-lg p-2 flex justify-between items-start">
+                                    <div class="space-y-0.5">
+                                        <div class="flex items-center gap-1.5">
+                                            <span class="text-[9px] font-bold text-white">PhonePe</span>
+                                            <span class="px-1 py-0.2 bg-brand-red/10 text-brand-red text-[7px] rounded uppercase font-mono font-bold">Debit</span>
+                                        </div>
+                                        <p class="text-[8px] text-slate-400 font-mono">Ref: 123849 • UPI xx7812</p>
+                                    </div>
+                                    <div class="text-right space-y-0.5">
+                                        <span class="text-[10px] font-bold text-brand-red">- ₹1,200.00</span>
+                                        <p class="text-[7px] text-slate-500 font-mono">Shopping</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mini Android Bottom Nav Bar -->
+                        <div class="h-10 border-t border-brand-border/40 bg-brand-dark/95 flex items-center justify-around text-slate-500">
+                            <div class="flex flex-col items-center text-brand-accent">
+                                <svg class="w-4.5 h-4.5" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                                <span class="text-[6px] font-semibold mt-0.5">Dashboard</span>
+                            </div>
+                            <div class="flex flex-col items-center hover:text-slate-300 cursor-pointer">
+                                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                                <span class="text-[6px] font-semibold mt-0.5">Transactions</span>
+                            </div>
+                            <div class="flex flex-col items-center hover:text-slate-300 cursor-pointer">
+                                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                <span class="text-[6px] font-semibold mt-0.5">Settings</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Decorative elements on sides of mockup -->
+                <div class="absolute -bottom-6 -right-6 bg-brand-card border border-brand-border p-3.5 rounded-2xl shadow-xl flex items-center gap-2.5 max-w-[200px] animate-bounce-slow">
+                    <div class="w-8 h-8 rounded-full bg-brand-green/10 flex items-center justify-center text-brand-green">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <div>
+                        <span class="block text-xs font-bold text-white leading-none">Auto Sync</span>
+                        <span class="text-[9px] text-slate-400 font-mono">Row appended</span>
+                    </div>
+                </div>
+
+                <div class="absolute top-1/4 -left-12 bg-brand-card border border-brand-border p-3 rounded-xl shadow-xl flex flex-col gap-1 max-w-[130px]">
+                    <span class="text-[9px] text-slate-400 uppercase font-mono tracking-wider">Duplicate Filter</span>
+                    <span class="text-xs font-bold text-brand-accent">Skipped duplicate</span>
+                    <span class="text-[7px] text-slate-500 leading-tight">Same Txn in 3-min window bypassed</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Interactive Parser Playground (LIVE DEMO) -->
+    <section id="demo" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-brand-border/40">
+        <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+                Interactive <span class="text-brand-accent">SMS Parser</span> Sandbox
+            </h2>
+            <p class="text-slate-300">
+                Type or select a transaction SMS notification below to see how Munshiji's modern parsing engine processes it entirely on-device, categorizes it, and structures it as a Google Sheet row.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            
+            <!-- Sandbox Left panel: Controls and Inputs -->
+            <div class="lg:col-span-6 bg-brand-card border border-brand-border rounded-2xl p-6 flex flex-col justify-between space-y-6">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono mb-3">Select a Standard SMS Template</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <button onclick="setPlaygroundTemplate('hdfc_debit')" class="p-3 text-left rounded-xl bg-brand-dark/50 border border-brand-border hover:border-brand-blue/60 hover:bg-brand-dark transition-all text-xs space-y-1 group">
+                            <div class="flex justify-between items-center"><span class="font-bold text-white group-hover:text-brand-blue">HDFC Bank Debit</span><span class="text-[9px] font-mono text-brand-red">DEBIT</span></div>
+                            <p class="text-slate-400 truncate text-[11px]">Your a/c no. XX1234 has been debited by Rs 100.00...</p>
+                        </button>
+
+                        <button onclick="setPlaygroundTemplate('sbi_credit')" class="p-3 text-left rounded-xl bg-brand-dark/50 border border-brand-border hover:border-brand-green/60 hover:bg-brand-dark transition-all text-xs space-y-1 group">
+                            <div class="flex justify-between items-center"><span class="font-bold text-white group-hover:text-brand-green">SBI Credit</span><span class="text-[9px] font-mono text-brand-green">CREDIT</span></div>
+                            <p class="text-slate-400 truncate text-[11px]">Rs 5,000.00 received in your a/c XX5432...</p>
+                        </button>
+
+                        <button onclick="setPlaygroundTemplate('phonepe_spent')" class="p-3 text-left rounded-xl bg-brand-dark/50 border border-brand-border hover:border-brand-accent/60 hover:bg-brand-dark transition-all text-xs space-y-1 group">
+                            <div class="flex justify-between items-center"><span class="font-bold text-white group-hover:text-brand-accent">PhonePe Dine-out</span><span class="text-[9px] font-mono text-brand-red">DEBIT</span></div>
+                            <p class="text-slate-400 truncate text-[11px]">₹450.00 paid towards Swiggy Restaurant...</p>
+                        </button>
+
+                        <button onclick="setPlaygroundTemplate('creditcard_spent')" class="p-3 text-left rounded-xl bg-brand-dark/50 border border-brand-border hover:border-brand-blue/60 hover:bg-brand-dark transition-all text-xs space-y-1 group">
+                            <div class="flex justify-between items-center"><span class="font-bold text-white group-hover:text-brand-blue">HDFC Credit Card</span><span class="text-[9px] font-mono text-brand-red">DEBIT</span></div>
+                            <p class="text-slate-400 truncate text-[11px]">Spent ₹2,500.00 on Credit Card ending 4321...</p>
+                        </button>
+
+                        <button onclick="setPlaygroundTemplate('amazon_purchase')" class="p-3 text-left rounded-xl bg-brand-dark/50 border border-brand-border hover:border-brand-blue/60 hover:bg-brand-dark transition-all text-xs space-y-1 group">
+                            <div class="flex justify-between items-center"><span class="font-bold text-white group-hover:text-brand-blue">Amazon Shop</span><span class="text-[9px] font-mono text-brand-red">DEBIT</span></div>
+                            <p class="text-slate-400 truncate text-[11px]">Dear Customer, your txn of Rs 1,299.00 on Amazon...</p>
+                        </button>
+
+                        <button onclick="setPlaygroundTemplate('mutual_fund_deposit')" class="p-3 text-left rounded-xl bg-brand-dark/50 border border-brand-border hover:border-brand-green/60 hover:bg-brand-dark transition-all text-xs space-y-1 group">
+                            <div class="flex justify-between items-center"><span class="font-bold text-white group-hover:text-brand-green">SIP Investment</span><span class="text-[9px] font-mono text-brand-green">CREDIT</span></div>
+                            <p class="text-slate-400 truncate text-[11px]">Your mutual fund SIP of ₹10,000.00 was credited...</p>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <label for="smsInput" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono">Custom SMS Message Body</label>
+                        <span id="charCount" class="text-[10px] text-slate-500 font-mono">0 chars</span>
+                    </div>
+                    <div class="relative">
+                        <textarea id="smsInput" rows="4" class="w-full bg-brand-dark border border-brand-border rounded-xl px-4 py-3 text-sm text-slate-200 font-sans focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all resize-none leading-relaxed" placeholder="Paste bank SMS text here... e.g. Your a/c ending in 4321 was debited by Rs 500 on 12-07-26."></textarea>
+                        <!-- Reset Button inside Textarea -->
+                        <button onclick="clearSmsInput()" class="absolute bottom-3 right-3 text-slate-500 hover:text-white p-1 text-xs font-medium bg-brand-card/80 border border-brand-border rounded-md hover:bg-brand-card font-mono">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono mb-1.5">Sender ID</label>
+                        <input id="senderInput" type="text" value="AD-HDFCBK" class="w-full bg-brand-dark border border-brand-border rounded-lg px-3 py-2 text-xs font-mono text-slate-200 focus:outline-none focus:border-brand-blue transition-all" />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono mb-1.5">Device Tag (Optional)</label>
+                        <input id="deviceInput" type="text" value="Admin-PO1" class="w-full bg-brand-dark border border-brand-border rounded-lg px-3 py-2 text-xs font-mono text-slate-200 focus:outline-none focus:border-brand-blue transition-all" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sandbox Right panel: Output Ledger Card -->
+            <div class="lg:col-span-6 flex flex-col justify-between space-y-6">
+                
+                <!-- Live Parse Result Panel -->
+                <div class="flex-1 bg-brand-card border border-brand-border rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden">
+                    <!-- Status Header -->
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono">Munshiji Engine Output</span>
+                        <div class="flex items-center gap-1.5">
+                            <span class="h-2 w-2 bg-brand-green rounded-full animate-pulse"></span>
+                            <span class="text-[10px] font-mono text-brand-green font-semibold">ONLINE PARSING SUCCESS</span>
+                        </div>
+                    </div>
+
+                    <!-- Parsed Transaction Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-auto">
+                        
+                        <!-- Main Field: Amount & Type -->
+                        <div class="md:col-span-2 bg-brand-dark/40 border border-brand-border/60 rounded-xl p-4 flex justify-between items-center">
+                            <div>
+                                <span class="text-[10px] font-mono text-slate-500 uppercase block tracking-wider">Identified Amount</span>
+                                <span id="outAmount" class="text-3xl font-extrabold text-white">₹0.00</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[10px] font-mono text-slate-500 uppercase block tracking-wider">Transaction Type</span>
+                                <span id="outTypeBadge" class="inline-block px-2.5 py-1 text-xs font-bold font-mono rounded-lg tracking-wider bg-slate-800 text-slate-400">WAITING...</span>
+                            </div>
+                        </div>
+
+                        <!-- Bank Name -->
+                        <div class="bg-brand-dark/40 border border-brand-border/60 rounded-xl p-3">
+                            <span class="text-[9px] font-mono text-slate-500 uppercase block tracking-wider">Extracted Bank</span>
+                            <span id="outBank" class="text-sm font-bold text-slate-200">Unknown Bank</span>
+                        </div>
+
+                        <!-- Account Identifier -->
+                        <div class="bg-brand-dark/40 border border-brand-border/60 rounded-xl p-3">
+                            <span class="text-[9px] font-mono text-slate-500 uppercase block tracking-wider">Source Account/Card</span>
+                            <span id="outAccount" class="text-sm font-bold font-mono text-brand-blue">A/c XX----</span>
+                        </div>
+
+                        <!-- Reference No -->
+                        <div class="bg-brand-dark/40 border border-brand-border/60 rounded-xl p-3">
+                            <span class="text-[9px] font-mono text-slate-500 uppercase block tracking-wider">Transaction Reference (Ref No)</span>
+                            <span id="outRef" class="text-sm font-bold font-mono text-brand-accent">N/A</span>
+                        </div>
+
+                        <!-- Category -->
+                        <div class="bg-brand-dark/40 border border-brand-border/60 rounded-xl p-3">
+                            <span class="text-[9px] font-mono text-slate-500 uppercase block tracking-wider">Categorization</span>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span id="outCatIcon" class="text-base">📁</span>
+                                <span id="outCategory" class="text-sm font-bold text-slate-200">Others</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Google Sheets Raw Row Output -->
+                    <div class="mt-4 pt-4 border-t border-brand-border/60">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider font-mono">Google Sheet Row Representation</span>
+                            <button onclick="copySheetRow()" class="text-[10px] text-brand-accent hover:underline flex items-center gap-1 font-mono">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
+                                Copy Row Text
+                            </button>
+                        </div>
+                        <div class="bg-[#05080f] rounded-xl p-3.5 border border-brand-border/80 font-mono text-[11px] overflow-x-auto text-brand-accent leading-relaxed">
+                            <span class="text-slate-500">[</span> <span id="outSheetRow" class="text-slate-300">"Date/Time", "HDFCBK", "Body Text", "Device", "0.00", "DEBIT", "Others"</span> <span class="text-slate-500">]</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Core Features Grid -->
+    <section id="features" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 bg-brand-card/20 rounded-3xl border border-brand-border/40 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-brand-card/30 to-transparent pointer-events-none"></div>
+        
+        <div class="text-center max-w-3xl mx-auto space-y-4 mb-16 relative z-10">
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+                Engineered for <span class="text-brand-blue">Security</span>, Built for <span class="text-brand-accent">Autonomy</span>
+            </h2>
+            <p class="text-slate-300">
+                Forget manual logging tools. Munshiji runs seamlessly, protects your data with robust localized models, and provides powerful integration targets.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
+            
+            <!-- Feature 1: Dynamic Syncing & Self-Healing -->
+            <div class="bg-brand-card border border-brand-border/60 hover:border-brand-blue/40 rounded-2xl p-6 space-y-4 hover:shadow-lg hover:shadow-brand-blue/5 transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 19l-3.356-3.356"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white">Self-Healing Sync Worker</h3>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Accidentally delete a spreadsheet row? No problem. Munshiji scans remote Google Sheets, compares histories with local SQLite data, and automatically re-inserts any missing records.
+                </p>
+            </div>
+
+            <!-- Feature 2: Fuzzy Duplicate Protection -->
+            <div class="bg-brand-card border border-brand-border/60 hover:border-brand-accent/40 rounded-2xl p-6 space-y-4 hover:shadow-lg hover:shadow-brand-accent/5 transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white">Duplicate Protection (3-Min Window)</h3>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Carriers or banks sometimes broadcast redundant SMS alerts. Munshiji performs fuzzy timestamp-bracket matching on account, bank, and transaction details to guarantee clean records.
+                </p>
+            </div>
+
+            <!-- Feature 3: Live Webhook Dispatch -->
+            <div class="bg-brand-card border border-brand-border/60 hover:border-brand-blue/40 rounded-2xl p-6 space-y-4 hover:shadow-lg hover:shadow-brand-blue/5 transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white">Real-Time Webhook Target</h3>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    For power users and businesses. Register a custom URL in settings; Munshiji immediately dispatches parsed JSON transactions as HTTP POST requests for continuous backend processing.
+                </p>
+            </div>
+
+            <!-- Feature 4: Client-Side Security First -->
+            <div class="bg-brand-card border border-brand-border/60 hover:border-brand-accent/40 rounded-2xl p-6 space-y-4 hover:shadow-lg hover:shadow-brand-accent/5 transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white">Encrypted SQL Storage</h3>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    All SMS message logs can be fully encrypted before storing in the local Room database. Munshiji never logs, sends, or stores your personal messages or credit card details on third-party clouds.
+                </p>
+            </div>
+
+            <!-- Feature 5: Multi-Tenant Secure Tunneling -->
+            <div class="bg-brand-card border border-brand-border/60 hover:border-brand-blue/40 rounded-2xl p-6 space-y-4 hover:shadow-lg hover:shadow-brand-blue/5 transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white">POS Tenant Secure Tunnel</h3>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Link multiple local billing counters or POS terminals to an Admin device. Munshiji broadcasts transaction logs instantly across secure peer-to-peer tunnels to synchronize central store records.
+                </p>
+            </div>
+
+            <!-- Feature 6: Google Play Services OAuth -->
+            <div class="bg-brand-card border border-brand-border/60 hover:border-brand-accent/40 rounded-2xl p-6 space-y-4 hover:shadow-lg hover:shadow-brand-accent/5 transition-all group">
+                <div class="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white">Direct Google Integration</h3>
+                <p class="text-sm text-slate-300 leading-relaxed">
+                    Uses official Google API integration tokens securely resolved inside Android Play Services. Your Google Account password is never entered, requested, or accessed by the app.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- How It Works Flow Chart / Visualiser -->
+    <section id="how-it-works" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+                How Munshiji <span class="text-brand-accent">Simplifies</span> Your Bookkeeping
+            </h2>
+            <p class="text-slate-300">
+                Four simple steps, completed in milliseconds, entirely behind the scenes without user intervention.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+            <!-- Connector line on desktop -->
+            <div class="hidden md:block absolute top-12 left-1/8 right-1/8 h-0.5 bg-brand-border/60 z-0"></div>
+
+            <!-- Step 1 -->
+            <div class="bg-brand-card/40 border border-brand-border p-6 rounded-2xl relative z-10 text-center space-y-4 hover:border-brand-blue/30 transition-all">
+                <div class="w-12 h-12 rounded-full bg-brand-blue text-brand-dark font-extrabold text-base flex items-center justify-center mx-auto shadow-md shadow-brand-blue/20">
+                    1
+                </div>
+                <h3 class="text-base font-bold text-white">Carrier SMS Received</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Your Android device receives an institutional SMS from your bank (e.g. AD-HDFCBK) regarding a transaction.
+                </p>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="bg-brand-card/40 border border-brand-border p-6 rounded-2xl relative z-10 text-center space-y-4 hover:border-brand-accent/30 transition-all">
+                <div class="w-12 h-12 rounded-full bg-brand-accent text-brand-dark font-extrabold text-base flex items-center justify-center mx-auto shadow-md shadow-brand-accent/20">
+                    2
+                </div>
+                <h3 class="text-base font-bold text-white">On-Device Extraction</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Munshiji's core parser extracts the exact amount, transaction type (Cr/Dr), cards/account numbers, and reference code.
+                </p>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="bg-brand-card/40 border border-brand-border p-6 rounded-2xl relative z-10 text-center space-y-4 hover:border-brand-blue/30 transition-all">
+                <div class="w-12 h-12 rounded-full bg-brand-blue text-brand-dark font-extrabold text-base flex items-center justify-center mx-auto shadow-md shadow-brand-blue/20">
+                    3
+                </div>
+                <h3 class="text-base font-bold text-white">Google Sheet Row Append</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    The background <code>SyncWorker</code> appends the record into your Google Sheet. Works offline and syncs immediately when online.
+                </p>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="bg-brand-card/40 border border-brand-border p-6 rounded-2xl relative z-10 text-center space-y-4 hover:border-brand-accent/30 transition-all">
+                <div class="w-12 h-12 rounded-full bg-brand-accent text-brand-dark font-extrabold text-base flex items-center justify-center mx-auto shadow-md shadow-brand-accent/20">
+                    4
+                </div>
+                <h3 class="text-base font-bold text-white">Real-time Dashboard</h3>
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    Log in on your sheet or check the app dashboard charts. Review instant insights, share sheets, or analyze monthly expenditure.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integrations & Protocol Specs Section -->
+    <section id="integrations" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-brand-border/40">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div class="lg:col-span-5 space-y-6">
+                <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+                    Power Integration for <span class="text-brand-blue">Developers</span> & Admins
+                </h2>
+                <p class="text-slate-300 leading-relaxed">
+                    Munshiji is built with extensible interfaces. Whether you want to dump data into your web application, sync with automation tools, or run a POS multi-terminal store, we have got you covered.
+                </p>
+                
+                <!-- Toggle Tab Buttons -->
+                <div class="space-y-3">
+                    <button onclick="switchIntegrationTab('webhook')" id="tabBtn_webhook" class="w-full p-4 text-left rounded-xl bg-brand-card border border-brand-blue/40 flex items-center gap-3 transition-all">
+                        <div class="w-8 h-8 rounded bg-brand-blue/10 flex items-center justify-center text-brand-blue font-mono font-bold text-xs">P1</div>
+                        <div>
+                            <span class="block text-sm font-bold text-white">Webhook Post Payload Specification</span>
+                            <span class="text-xs text-slate-400">Push transaction JSON directly to your servers</span>
+                        </div>
+                    </button>
+
+                    <button onclick="switchIntegrationTab('sheets')" id="tabBtn_sheets" class="w-full p-4 text-left rounded-xl bg-brand-dark border border-brand-border hover:bg-brand-card/30 flex items-center gap-3 transition-all">
+                        <div class="w-8 h-8 rounded bg-brand-accent/10 flex items-center justify-center text-brand-accent font-mono font-bold text-xs">P2</div>
+                        <div>
+                            <span class="block text-sm font-bold text-white">Recommended Google Sheet Headers</span>
+                            <span class="text-xs text-slate-400 font-mono">Format columns for optimized logging</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Content Panel -->
+            <div class="lg:col-span-7 bg-brand-card border border-brand-border rounded-2xl p-6 h-[400px] flex flex-col justify-between">
+                
+                <!-- Webhook Spec Tab content -->
+                <div id="tabContent_webhook" class="space-y-4 flex-1 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono">HTTP POST JSON Payload Format</span>
+                            <span class="px-2 py-0.5 text-[9px] font-mono rounded bg-brand-blue/15 text-brand-blue border border-brand-blue/30">content-type: application/json</span>
+                        </div>
+                        <p class="text-xs text-slate-400">
+                            Whenever a transaction SMS is parsed on the Admin phone, it instantly triggers a background HTTP POST with this standardized JSON structure:
+                        </p>
+                    </div>
+
+                    <div class="bg-[#05080f] rounded-xl p-4 border border-brand-border/80 font-mono text-[11px] overflow-y-auto max-h-[220px] text-brand-blue leading-relaxed">
+<pre class="text-slate-300">{
+  <span class="text-brand-accent">"id"</span>: <span class="text-slate-400">"tx_1720726712390"</span>,
+  <span class="text-brand-accent">"sender"</span>: <span class="text-slate-400">"AD-HDFCBK"</span>,
+  <span class="text-brand-accent">"timestamp"</span>: <span class="text-slate-400">1720726712000</span>,
+  <span class="text-brand-accent">"amount"</span>: <span class="text-slate-400">1250.00</span>,
+  <span class="text-brand-accent">"txnType"</span>: <span class="text-slate-400">"DEBIT"</span>,
+  <span class="text-brand-accent">"medium"</span>: <span class="text-slate-400">"UPI"</span>,
+  <span class="text-brand-accent">"account"</span>: <span class="text-slate-400">"A/c XX5432"</span>,
+  <span class="text-brand-accent">"referenceNo"</span>: <span class="text-slate-400">"419283719283"</span>,
+  <span class="text-brand-accent">"category"</span>: <span class="text-slate-400">"Dining"</span>,
+  <span class="text-brand-accent">"rawBody"</span>: <span class="text-slate-400">"Your a/c ending XX5432 has been debited by Rs 1250..."</span>
+}</pre>
+                    </div>
+
+                    <p class="text-[10px] text-slate-500 font-mono italic">
+                        * In Multi-Terminal POS mode, clients connected via Secure local NS-SD Tunnels will also receive this live broadcast.
+                    </p>
+                </div>
+
+                <!-- Google Sheets Spec Tab content -->
+                <div id="tabContent_sheets" class="hidden space-y-4 flex-1 flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono block mb-2">Spreadsheet Columns Format</span>
+                        <p class="text-xs text-slate-400">
+                            To ensure beautiful alignments, we recommend setting up your central Google Spreadsheet with these exact headers. Munshiji appends row logs sequentially matching this order:
+                        </p>
+                    </div>
+
+                    <div class="space-y-2 flex-1 flex flex-col justify-center">
+                        <div class="grid grid-cols-12 gap-2 text-xs font-mono font-bold text-slate-300 bg-brand-dark/50 border border-brand-border p-2.5 rounded-lg">
+                            <span class="col-span-1 text-brand-accent">#</span>
+                            <span class="col-span-4 text-brand-accent">Header Column</span>
+                            <span class="col-span-7 text-slate-400">Example Log Representation</span>
+                        </div>
+                        <div class="space-y-1.5 max-h-[180px] overflow-y-auto pr-1">
+                            <div class="grid grid-cols-12 gap-2 text-[11px] font-mono border-b border-brand-border/40 pb-1">
+                                <span class="col-span-1 text-slate-500">1</span>
+                                <span class="col-span-4 text-white font-semibold">Date & Time</span>
+                                <span class="col-span-7 text-slate-400">2026-07-11 12:45:30</span>
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 text-[11px] font-mono border-b border-brand-border/40 pb-1">
+                                <span class="col-span-1 text-slate-500">2</span>
+                                <span class="col-span-4 text-white font-semibold">Bank/Sender</span>
+                                <span class="col-span-7 text-slate-400">AD-HDFCBK</span>
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 text-[11px] font-mono border-b border-brand-border/40 pb-1">
+                                <span class="col-span-1 text-slate-500">3</span>
+                                <span class="col-span-4 text-white font-semibold">SMS Message Body</span>
+                                <span class="col-span-7 text-slate-400">Rs 450.00 spent on Card xx3412...</span>
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 text-[11px] font-mono border-b border-brand-border/40 pb-1">
+                                <span class="col-span-1 text-slate-500">4</span>
+                                <span class="col-span-4 text-white font-semibold">Device Tag</span>
+                                <span class="col-span-7 text-slate-400">Counter-A (POS-1)</span>
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 text-[11px] font-mono border-b border-brand-border/40 pb-1">
+                                <span class="col-span-1 text-slate-500">5</span>
+                                <span class="col-span-4 text-white font-semibold">Amount (₹)</span>
+                                <span class="col-span-7 text-slate-400">450.00</span>
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 text-[11px] font-mono border-b border-brand-border/40 pb-1">
+                                <span class="col-span-1 text-slate-500">6</span>
+                                <span class="col-span-4 text-white font-semibold">Type</span>
+                                <span class="col-span-7 text-brand-red font-semibold">DEBIT</span>
+                            </div>
+                            <div class="grid grid-cols-12 gap-2 text-[11px] font-mono">
+                                <span class="col-span-1 text-slate-500">7</span>
+                                <span class="col-span-4 text-white font-semibold">Category</span>
+                                <span class="col-span-7 text-slate-400">Dining</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-[10px] text-slate-500 font-mono italic">
+                        * Enable "Sheet Simulation Mode" in the app settings to test logs locally without a Google connection.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Detailed Configuration & Setup Manual -->
+    <section id="manual" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 bg-[#070b13] border-t border-brand-border/40">
+        <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
+                Quick Start & <span class="text-brand-accent">Setup Guide</span>
+            </h2>
+            <p class="text-slate-300">
+                Configure Munshiji in less than two minutes with our step-by-step instructions.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <!-- Step 1 Card -->
+            <div class="bg-brand-card/40 border border-brand-border p-6 rounded-2xl flex flex-col justify-between space-y-4 hover:border-brand-blue/20 transition-all">
+                <div class="space-y-3">
+                    <span class="text-3xl">📥</span>
+                    <h3 class="text-lg font-bold text-white">1. Install and Permissions</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Download the compiled <code>app-debug.apk</code> to your Android device. Run the installer and grant the <strong>SMS Receive and Read permissions</strong> when prompted. This is critical for the background ledger engine to automate logging.
+                    </p>
+                </div>
+                <div class="pt-2 text-[10px] text-slate-500 font-mono">
+                    System Requirement: Android 8.0+
+                </div>
+            </div>
+
+            <!-- Step 2 Card -->
+            <div class="bg-brand-card/40 border border-brand-border p-6 rounded-2xl flex flex-col justify-between space-y-4 hover:border-brand-accent/20 transition-all">
+                <div class="space-y-3">
+                    <span class="text-3xl">🔗</span>
+                    <h3 class="text-lg font-bold text-white">2. Link Google Spreadsheet</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Open Google Sheets on a browser and create a new sheet. Copy the long string of characters from the URL: <br/>
+                        <code class="text-brand-accent font-mono text-[10px] break-all">/d/&lt;Spreadsheet_ID&gt;/edit</code>. <br/>
+                        Paste this ID into the <strong>Spreadsheet ID</strong> field under the app Settings tab.
+                    </p>
+                </div>
+                <div class="pt-2 text-[10px] text-slate-500 font-mono">
+                    Direct Official Google OAuth Flow
+                </div>
+            </div>
+
+            <!-- Step 3 Card -->
+            <div class="bg-brand-card/40 border border-brand-border p-6 rounded-2xl flex flex-col justify-between space-y-4 hover:border-brand-blue/20 transition-all">
+                <div class="space-y-3">
+                    <span class="text-3xl">✨</span>
+                    <h3 class="text-lg font-bold text-white">3. Verify and Run</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Tap the <strong>"Run Diagnostics"</strong> button in settings to ensure database connections, network protocols, and Google Accounts are fully verified. Try sending a mock transaction SMS to trigger background syncing automatically!
+                    </p>
+                </div>
+                <div class="pt-2 text-[10px] text-slate-500 font-mono">
+                    Self-Check Diagnostics Tool Included
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Call to Action / Downloads -->
+    <section id="download" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center relative">
+        <div class="absolute inset-0 bg-gradient-to-br from-brand-blue/5 to-brand-accent/5 rounded-3xl border border-brand-border/40 pointer-events-none"></div>
+        
+        <div class="max-w-3xl mx-auto space-y-8 relative z-10">
+            <span class="text-5xl inline-block animate-bounce-slow">📱</span>
+            
+            <h2 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                Ready to Automate Your Bookkeeping?
+            </h2>
+            
+            <p class="text-slate-300 max-w-xl mx-auto text-base">
+                Download the fully compiled Munshiji app package now, host your private ledger on Google Sheets, and never forget an expense again.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <button onclick="downloadApkPlaceholder()" class="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-brand-accent text-brand-dark font-bold text-sm uppercase tracking-wider rounded-xl shadow-lg hover:bg-brand-accent/90 hover:shadow-brand-accent/20 hover:-translate-y-0.5 transition-all font-mono">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+                    Download Compiled APK
+                </button>
+                <a href="USER_MANUAL.md" download class="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 bg-brand-card hover:bg-brand-card/80 border border-brand-border text-slate-100 font-semibold rounded-xl hover:-translate-y-0.5 transition-all">
+                    📄 Read User Manual
+                </a>
+            </div>
+
+            <!-- Download notice -->
+            <p id="downloadNotice" class="text-xs text-brand-accent font-mono transition-all duration-300 opacity-0 h-4">
+                APK build directory location: <code>/app/build/outputs/apk/debug/app-debug.apk</code>
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark border-t border-brand-border/60 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-brand-accent/20 flex items-center justify-center">
+                    <span class="text-brand-accent font-bold font-mono text-sm">M</span>
+                </div>
+                <div>
+                    <span class="font-bold text-sm text-white">Munshiji (मुंशीजी)</span>
+                    <p class="text-[10px] text-slate-500">Secure Client-Side SMS Accounting Ledger</p>
+                </div>
+            </div>
+
+            <p class="text-xs text-slate-500 font-mono text-center md:text-right">
+                &copy; 2026 Munshiji Development Team. Released under private local sandbox licenses. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Core App Logic (Parser Sandbox + UI interactivity) -->
+    <script src="app.js"></script>
+</body>
+</html>
