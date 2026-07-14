@@ -1,5 +1,107 @@
 /* Munshiji Custom Website Styles */
 
+/* Theme CSS Custom Variables */
+:root {
+  --color-brand-dark: #0B111E;
+  --color-brand-card: #151F32;
+  --color-brand-accent: #F59E0B;
+  --color-brand-blue: #3B82F6;
+  --color-brand-green: #10B981;
+  --color-brand-red: #EF4444;
+  --color-brand-border: #1E293B;
+  --color-text-main: #F1F5F9;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+  --color-text-heading: #FFFFFF;
+}
+
+html.light-theme {
+  --color-brand-dark: #F8FAFC; /* slate-50 */
+  --color-brand-card: #FFFFFF; /* white */
+  --color-brand-accent: #D97706; /* amber-600 */
+  --color-brand-blue: #1D4ED8; /* blue-700 */
+  --color-brand-green: #047857; /* green-700 */
+  --color-brand-red: #B91C1C; /* red-700 */
+  --color-brand-border: #E2E8F0; /* slate-200 */
+  --color-text-main: #1E293B; /* slate-800 */
+  --color-text-secondary: #475569; /* slate-600 */
+  --color-text-muted: #64748B; /* slate-500 */
+  --color-text-heading: #0F172A; /* slate-900 */
+}
+
+/* Base Light Theme overrides */
+html.light-theme body {
+  background-color: var(--color-brand-dark) !important;
+  color: var(--color-text-main) !important;
+}
+
+html.light-theme h1,
+html.light-theme h2,
+html.light-theme h3,
+html.light-theme h4,
+html.light-theme h5,
+html.light-theme h6,
+html.light-theme .text-white,
+html.light-theme .text-slate-100,
+html.light-theme .text-slate-200 {
+  color: var(--color-text-heading) !important;
+}
+
+html.light-theme p,
+html.light-theme span,
+html.light-theme .text-slate-300,
+html.light-theme .text-slate-400 {
+  color: var(--color-text-secondary) !important;
+}
+
+html.light-theme .text-slate-500 {
+  color: var(--color-text-muted) !important;
+}
+
+/* BG & Border overwrites for specific hardcoded elements */
+html.light-theme .bg-\[\#05070c\] {
+  background-color: #F1F5F9 !important; /* slate-100 */
+}
+html.light-theme .bg-\[\#05080f\] {
+  background-color: #F8FAFC !important; /* slate-50 */
+}
+html.light-theme .bg-\[\#070b13\] {
+  background-color: #F1F5F9 !important; /* slate-100 */
+}
+html.light-theme .border-\[\#1e2330\] {
+  border-color: #E2E8F0 !important; /* slate-200 */
+}
+html.light-theme .border-brand-border/40,
+html.light-theme .border-brand-border/60,
+html.light-theme .border-brand-border {
+  border-color: var(--color-brand-border) !important;
+}
+
+html.light-theme .bg-brand-dark,
+html.light-theme .bg-brand-dark/80,
+html.light-theme .bg-brand-dark/95 {
+  background-color: var(--color-brand-dark) !important;
+}
+
+html.light-theme .bg-brand-card,
+html.light-theme .bg-brand-card/40,
+html.light-theme .bg-brand-card/60,
+html.light-theme .bg-brand-card/80 {
+  background-color: var(--color-brand-card) !important;
+}
+
+html.light-theme code {
+  background-color: var(--color-brand-card) !important;
+  color: var(--color-brand-accent) !important;
+  border: 1px solid var(--color-brand-border) !important;
+}
+
+/* Selection Override for light mode */
+html.light-theme ::selection {
+  background-color: var(--color-brand-accent);
+  color: #FFFFFF;
+}
+
 /* Custom Animations */
 @keyframes bounce-slow {
     0%, 100% {
@@ -35,3 +137,4 @@ header a, button {
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 }
+
