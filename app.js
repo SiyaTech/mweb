@@ -392,7 +392,7 @@ const translations = {
         hero_badge_text: "Now with Automated Record Safeguards",
         hero_title_1: "Automate Your Ledger",
         hero_title_2: "Directly From SMS Alerts",
-        hero_desc: "Munshiji (मुंशीजी) runs quietly on your Android device, securely organizing official bank payment alerts into a clean ledger, and automatically updating your personal <strong class="text-white hover:text-brand-accent transition-colors">Google Sheets</strong> or <strong class="text-white hover:text-brand-accent transition-colors">Store Ledger</strong> in real-time.",
+        hero_desc: "Munshiji (मुंशीजी) runs quietly on your Android device, securely organizing official bank payment alerts into a clean ledger, and automatically updating your personal <strong class='text-white hover:text-brand-accent transition-colors'>Google Sheets</strong> or <strong class='text-white hover:text-brand-accent transition-colors'>Store Ledger</strong> in real-time.",
         hero_download_btn_text: "Download APK (v2.0)",
         hero_sandbox_btn_text: "Try Sandbox Organizer",
         trust_signal_1: "<strong class="text-white">100% On-Device</strong> Privacy",
