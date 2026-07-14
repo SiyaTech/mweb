@@ -398,7 +398,7 @@ const translations = {
         trust_signal_1: "<strong class='text-white'>100% On-Device</strong> Privacy",
         trust_signal_2: "<strong class='text-white'>Zero Cloud Storage</strong> Your data stays yours",
         trust_signal_3: "<strong class='text-white'>Direct Google Link</strong> No middle servers",
-        demo_title: "Interactive <span "<strong class='text-white'>SMS Organizer</span> Sandbox",
+        demo_title: "Interactive <span strong class='text-white'>SMS Organizer</span> Sandbox",
         demo_desc: "Simulate or select a bank alert below to see how Munshiji automatically organizes transaction details in a split second and structures it as a beautiful ledger row.",
         demo_template_label: "Select a Standard Bank Alert Template",
         demo_custom_sms_label: "Custom Payment Alert Body",
