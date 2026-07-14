@@ -184,9 +184,9 @@
                 <!-- Trust signals -->
                 <div class="pt-6 border-t border-brand-border/40 max-w-xl mx-auto lg:mx-0">
                     <p class="text-xs text-slate-400 font-mono flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-2">
-                        <span data-i18n="trust_signal_1" class="flex items-center gap-1.5"><strong class="text-white">100% Client-Side</strong> Parsing</span>
-                        <span data-i18n="trust_signal_2" class="flex items-center gap-1.5"><strong class="text-white">Zero Cloud Logs</strong> Your Data stays yours</span>
-                        <span data-i18n="trust_signal_3" class="flex items-center gap-1.5"><strong class="text-white">Room SQL</strong> DB Encryption</span>
+                        <span data-i18n="trust_signal_1" class="flex items-center gap-1.5"><strong class="text-white">100% On-Device</strong> Privacy</span>
+                        <span data-i18n="trust_signal_2" class="flex items-center gap-1.5"><strong class="text-white">Zero Cloud Storage</strong> Your data stays yours</span>
+                        <span data-i18n="trust_signal_3" class="flex items-center gap-1.5"><strong class="text-white">Direct Google Link</strong> No middle servers</span>
                     </p>
                 </div>
             </div>
@@ -350,9 +350,9 @@
                 </div>
 
                 <div class="absolute top-1/4 -left-12 bg-brand-card border border-brand-border p-3 rounded-xl shadow-xl flex flex-col gap-1 max-w-[130px]">
-                    <span class="text-[9px] text-slate-400 uppercase font-mono tracking-wider">Duplicate Filter</span>
-                    <span class="text-xs font-bold text-brand-accent">Skipped duplicate</span>
-                    <span class="text-[7px] text-slate-500 leading-tight">Same Txn in 3-min window bypassed</span>
+                    <span class="text-[9px] text-slate-400 uppercase font-mono tracking-wider">Double-Entry Block</span>
+                    <span class="text-xs font-bold text-brand-accent">Duplicate Filtered</span>
+                    <span class="text-[7px] text-slate-500 leading-tight">Repeated bank alerts are automatically skipped</span>
                 </div>
             </div>
 
@@ -554,9 +554,9 @@
                 <div class="w-12 h-12 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:scale-110 transition-transform">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 19l-3.356-3.356"></path></svg>
                 </div>
-                <h3 data-i18n="feat_1_title" class="text-lg font-bold text-white">Self-Healing Sync Worker</h3>
+                <h3 data-i18n="feat_1_title" class="text-lg font-bold text-white">Automatic Record Recovery</h3>
                 <p data-i18n="feat_1_desc" class="text-sm text-slate-300 leading-relaxed">
-                    Accidentally delete a spreadsheet row? No problem. Munshiji scans remote Google Sheets, compares histories with local SQLite data, and automatically re-inserts any missing records.
+                    Accidentally delete a spreadsheet row? No problem. Munshiji automatically scans your connected sheet, compares it with secure on-device logs, and re-saves any missing records.
                 </p>
             </div>
 
@@ -565,9 +565,9 @@
                 <div class="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 </div>
-                <h3 data-i18n="feat_2_title" class="text-lg font-bold text-white">Duplicate Protection (3-Min Window)</h3>
+                <h3 data-i18n="feat_2_title" class="text-lg font-bold text-white">Duplicate Ledger Protection</h3>
                 <p data-i18n="feat_2_desc" class="text-sm text-slate-300 leading-relaxed">
-                    Carriers or banks sometimes broadcast redundant SMS alerts. Munshiji performs fuzzy timestamp-bracket matching on account, bank, and transaction details to guarantee clean records.
+                    Carriers or banks sometimes broadcast redundant alerts. Munshiji automatically filters out duplicate messages received in a short window to guarantee pristine accounting.
                 </p>
             </div>
 
@@ -576,9 +576,9 @@
                 <div class="w-12 h-12 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:scale-110 transition-transform">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                 </div>
-                <h3 data-i18n="feat_3_title" class="text-lg font-bold text-white">Real-Time Webhook Target</h3>
+                <h3 data-i18n="feat_3_title" class="text-lg font-bold text-white">Automated Store Sync</h3>
                 <p data-i18n="feat_3_desc" class="text-sm text-slate-300 leading-relaxed">
-                    For power users and businesses. Register a custom URL in settings; Munshiji immediately dispatches parsed JSON transactions as HTTP POST requests for continuous backend processing.
+                    For business systems and software. Register your server's sync URL in settings; Munshiji immediately dispatches new transaction details directly to your existing systems for live updates.
                 </p>
             </div>
 
@@ -587,9 +587,9 @@
                 <div class="w-12 h-12 rounded-xl bg-brand-accent/10 flex items-center justify-center text-brand-accent group-hover:scale-110 transition-transform">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                 </div>
-                <h3 data-i18n="feat_4_title" class="text-lg font-bold text-white">Encrypted SQL Storage</h3>
+                <h3 data-i18n="feat_4_title" class="text-lg font-bold text-white">Secure On-Device Storage</h3>
                 <p data-i18n="feat_4_desc" class="text-sm text-slate-300 leading-relaxed">
-                    All SMS message logs can be fully encrypted before storing in the local Room database. Munshiji never logs, sends, or stores your personal messages or credit card details on third-party clouds.
+                    All transaction logs are fully encrypted before storing in the secure storage. Munshiji never logs, sends, or stores your personal messages or cards on external servers.
                 </p>
             </div>
 
@@ -598,9 +598,9 @@
                 <div class="w-12 h-12 rounded-xl bg-brand-blue/10 flex items-center justify-center text-brand-blue group-hover:scale-110 transition-transform">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
-                <h3 data-i18n="feat_5_title" class="text-lg font-bold text-white">POS Tenant Secure Tunnel</h3>
+                <h3 data-i18n="feat_5_title" class="text-lg font-bold text-white">Multi-Counter Ledger Sync</h3>
                 <p data-i18n="feat_5_desc" class="text-sm text-slate-300 leading-relaxed">
-                    Link multiple local billing counters or POS terminals to an Admin device. Munshiji broadcasts transaction logs instantly across secure peer-to-peer tunnels to synchronize central store records.
+                    Link multiple billing counter phones to a central screen. Munshiji broadcasts transaction logs instantly across secure store networks to consolidate central records.
                 </p>
             </div>
 
@@ -696,8 +696,8 @@
                     <button onclick="switchIntegrationTab('webhook')" id="tabBtn_webhook" class="w-full p-4 text-left rounded-xl bg-brand-card border border-brand-blue/40 flex items-center gap-3 transition-all">
                         <div class="w-8 h-8 rounded bg-brand-blue/10 flex items-center justify-center text-brand-blue font-mono font-bold text-xs">P1</div>
                         <div>
-                            <span data-i18n="integ_tab_webhook_title" class="block text-sm font-bold text-white">Webhook Post Payload Specification</span>
-                            <span data-i18n="integ_tab_webhook_desc" class="text-xs text-slate-400">Push transaction JSON directly to your servers</span>
+                            <span data-i18n="integ_tab_webhook_title" class="block text-sm font-bold text-white">Automated Store Sync Details</span>
+                            <span data-i18n="integ_tab_webhook_desc" class="text-xs text-slate-400 font-mono">Push transaction data directly to your store's systems</span>
                         </div>
                     </button>
 
@@ -976,8 +976,8 @@
                 </div>
                 <div class="w-full sm:w-[45%] pl-10 sm:pl-8 bg-brand-card/30 border border-brand-border/60 p-5 rounded-2xl">
                     <ul class="space-y-2 text-sm text-slate-400 list-disc list-inside">
-                        <li data-i18n="changelog_v200_feat1"><strong>Self-Healing Sync Worker</strong> automatically scans and re-inserts deleted sheet records.</li>
-                        <li data-i18n="changelog_v200_feat2"><strong>Duplicate Protection</strong> within 3-min brackets based on accounts and references.</li>
+                        <li data-i18n="changelog_v200_feat1"><strong>Self-Healing Sync</strong> automatically scans and re-inserts deleted sheet records.</li>
+                        <li data-i18n="changelog_v200_feat2"><strong>Duplicate Protection</strong> within 3-min windows based on business transaction parameters.</li>
                         <li data-i18n="changelog_v200_feat3">Full translation dictionaries for English, Hindi, and Gujarati languages.</li>
                     </ul>
                 </div>
@@ -988,13 +988,13 @@
                 <div class="absolute left-4 sm:left-1/2 -translate-x-[7px] w-[14px] h-[14px] rounded-full bg-brand-blue border-4 border-brand-dark shadow shadow-brand-blue/30 z-10"></div>
                 <div class="w-full sm:w-[45%] pl-10 sm:pl-0 sm:text-right">
                     <span class="inline-block px-2.5 py-1 text-xs font-bold font-mono text-brand-blue bg-brand-blue/10 border border-brand-blue/20 rounded-full mb-2" data-i18n="changelog_v120_badge">STABLE UPDATE</span>
-                    <h3 data-i18n="changelog_v120_title" class="text-xl font-bold text-white">v1.2.0 — Webhooks & Tunnels</h3>
+                    <h3 data-i18n="changelog_v120_title" class="text-xl font-bold text-white">v1.2.0 — Multi-Device Sync</h3>
                     <p class="text-xs text-slate-500 font-mono mt-1">April 2026</p>
                 </div>
                 <div class="w-full sm:w-[45%] pl-10 sm:pl-8 bg-brand-card/30 border border-brand-border/60 p-5 rounded-2xl">
                     <ul class="space-y-2 text-sm text-slate-400 list-disc list-inside">
-                        <li data-i18n="changelog_v120_feat1"><strong>Real-time Webhook Target</strong> endpoint dispatching formatted JSON payloads.</li>
-                        <li data-i18n="changelog_v120_feat2"><strong>Multi-terminal POS Tunnel</strong> to broadcast transaction logs across secure channels.</li>
+                        <li data-i18n="changelog_v120_feat1"><strong>Automated Store Sync</strong> updates transaction lists instantly across devices.</li>
+                        <li data-i18n="changelog_v120_feat2"><strong>Multi-Counter Syncing</strong> to broadcast transaction logs across secure channels.</li>
                         <li data-i18n="changelog_v120_feat3">Local Diagnostics Self-Check tool checking connectivity and API statuses.</li>
                     </ul>
                 </div>
@@ -1005,12 +1005,12 @@
                 <div class="absolute left-4 sm:left-1/2 -translate-x-[7px] w-[14px] h-[14px] rounded-full bg-brand-green border-4 border-brand-dark shadow shadow-brand-green/30 z-10"></div>
                 <div class="w-full sm:w-[45%] pl-10 sm:pl-0 sm:text-right">
                     <span class="inline-block px-2.5 py-1 text-xs font-bold font-mono text-brand-green bg-brand-green/10 border border-brand-green/20 rounded-full mb-2" data-i18n="changelog_v100_badge">INITIAL RELEASE</span>
-                    <h3 data-i18n="changelog_v100_title" class="text-xl font-bold text-white">v1.0.0 — Genesis Release</h3>
+                    <h3 data-i18n="changelog_v100_title" class="text-xl font-bold text-white">v1.0.0 — Launch Release</h3>
                     <p class="text-xs text-slate-500 font-mono mt-1">January 2026</p>
                 </div>
                 <div class="w-full sm:w-[45%] pl-10 sm:pl-8 bg-brand-card/30 border border-brand-border/60 p-5 rounded-2xl">
                     <ul class="space-y-2 text-sm text-slate-400 list-disc list-inside">
-                        <li data-i18n="changelog_v100_feat1">Robust core SMS parsing with regular expressions and on-device NLP rules.</li>
+                        <li data-i18n="changelog_v100_feat1">Robust core SMS parsing with smart on-device detection rules.</li>
                         <li data-i18n="changelog_v100_feat2">Direct Google Sheets append integration.</li>
                     </ul>
                 </div>
